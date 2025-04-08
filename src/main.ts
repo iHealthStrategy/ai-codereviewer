@@ -6,13 +6,15 @@ import parseDiff, { Chunk, File } from "parse-diff";
 import minimatch from "minimatch";
 
 const GITHUB_TOKEN: string = core.getInput("GITHUB_TOKEN");
-const OPENAI_API_KEY: string = core.getInput("OPENAI_API_KEY");
-const OPENAI_API_MODEL: string = core.getInput("OPENAI_API_MODEL");
+const LLM_KEY: string = core.getInput("LLM_KEY");
+const LLM_MODEL: string = core.getInput("LLM_MODEL");
+const LLM_BASE_URL: string = core.getInput("LLM_BASE_URL");
 
 const octokit = new Octokit({ auth: GITHUB_TOKEN });
 
 const openai = new OpenAI({
-  apiKey: OPENAI_API_KEY,
+  apiKey: LLM_KEY,
+  baseURL: LLM_BASE_URL
 });
 
 interface PRDetails {
@@ -115,7 +117,7 @@ async function getAIResponse(prompt: string): Promise<Array<{
   reviewComment: string;
 }> | null> {
   const queryConfig = {
-    model: OPENAI_API_MODEL,
+    model: LLM_MODEL,
     temperature: 0.2,
     max_tokens: 700,
     top_p: 1,
@@ -127,7 +129,7 @@ async function getAIResponse(prompt: string): Promise<Array<{
     const response = await openai.chat.completions.create({
       ...queryConfig,
       // return JSON if the model supports it:
-      ...(OPENAI_API_MODEL === "gpt-4-1106-preview"
+      ...(LLM_MODEL === "gpt-4-1106-preview"
         ? { response_format: { type: "json_object" } }
         : {}),
       messages: [
