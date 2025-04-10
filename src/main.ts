@@ -234,7 +234,7 @@ async function main() {
   });
 
   const comments = await analyzeCode(filteredDiff, prDetails);
-  core.exportVariable(core.getInput("output_var"), `共有${comments.length}条注释.`);
+  core.exportVariable(core.getInput("output_var"), `共有${comments.length}条修改建议.`);
   if (comments.length > 0) {
     await createReviewComment(
       prDetails.owner,
