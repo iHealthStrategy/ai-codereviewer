@@ -1,10 +1,10 @@
 {
-  "name": "open-ai-reviewer",
+  "name": "ihealth-ai-reviewer",
   "version": "1.0.0",
-  "description": "Open AI powered code reviews",
+  "description": "Automatic LLM powered code reviews",
   "main": "lib/main.js",
-  "author": "Ville Saukkonen",
-  "license": "MIT",
+  "author": "Yi Huang",
+  "license": "Apache License 2.0",
   "scripts": {
     "build": "tsc",
     "package": "ncc build --source-map --license licenses.txt",

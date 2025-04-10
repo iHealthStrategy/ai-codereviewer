@@ -18,4 +18,5 @@ jobs:
           LLM_KEY: ${{ secrets.LLM_KEY }}
           LLM_MODEL: ${{ secrets.LLM_MODEL }}
           LLM_BASE_URL: ${{ secrets.LLM_BASE_URL }}
+          output_var: "REVIEW_OUTPUT"
           exclude: "yarn.lock,dist/**"
