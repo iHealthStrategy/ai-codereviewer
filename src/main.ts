@@ -1,4 +1,4 @@
-import { readFileSync } from "fs";
+import { readFileSync, appendFileSync } from "fs";
 import * as core from "@actions/core";
 import OpenAI from "openai";
 import { Octokit } from "@octokit/rest";
@@ -88,7 +88,7 @@ function createPrompt(file: File, chunk: Chunk, prDetails: PRDetails): string {
 - Write the comment in GitHub Markdown format.
 - Use the given description only for the overall context and only comment the code.
 - IMPORTANT: NEVER suggest adding comments to the code.
-- All the comments should be writen in CHINESE.
+- All the comments MUST BE WRITEN IN CHINESE.
 
 Review the following code diff in the file "${
     file.to
@@ -236,7 +236,10 @@ async function main() {
   const comments = await analyzeCode(filteredDiff, prDetails);
   let output = `共有${comments.length}条修改建议.`;
   console.log("result:", output);
-  core.exportVariable(core.getInput("output_var"), output);
+  const githubOutputPath = process.env['GITHUB_OUTPUT'];
+  if (githubOutputPath) {
+    appendFileSync(githubOutputPath, `REVIEW_OUTPUT=${output}\n`);
+  }
   if (comments.length > 0) {
     await createReviewComment(
       prDetails.owner,
