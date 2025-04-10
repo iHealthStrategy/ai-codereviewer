@@ -234,7 +234,7 @@ async function main() {
   });
 
   const comments = await analyzeCode(filteredDiff, prDetails);
-  let output = `共有${comments.length}条修改建议.`;
+  let output = `共发现${comments.length}条优化建议.`;
   console.log("result:", output);
   const githubOutputPath = process.env['GITHUB_OUTPUT'];
   if (githubOutputPath) {

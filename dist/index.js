@@ -251,7 +251,7 @@ function main() {
             return !excludePatterns.some((pattern) => { var _a; return (0, minimatch_1.default)((_a = file.to) !== null && _a !== void 0 ? _a : "", pattern); });
         });
         const comments = yield analyzeCode(filteredDiff, prDetails);
-        let output = `共有${comments.length}条修改建议.`;
+        let output = `共发现${comments.length}条优化建议.`;
         console.log("result:", output);
         const githubOutputPath = process.env['GITHUB_OUTPUT'];
         if (githubOutputPath) {
