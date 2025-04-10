@@ -232,7 +232,7 @@ function main() {
         console.log("result:", output);
         const githubOutputPath = process.env['GITHUB_OUTPUT'];
         if (githubOutputPath) {
-          appendFileSync(githubOutputPath, `REVIEW_OUTPUT=${output}\n`);
+          fs_1.appendFileSync(githubOutputPath, `REVIEW_OUTPUT=${output}\n`);
         }
         if (comments.length > 0) {
             yield createReviewComment(prDetails.owner, prDetails.repo, prDetails.pull_number, comments);
