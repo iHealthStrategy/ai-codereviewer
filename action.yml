@@ -4,17 +4,22 @@ inputs:
   GITHUB_TOKEN:
     description: "GitHub token to interact with the repository."
     required: true
-  OPENAI_API_KEY:
-    description: "OpenAI API key for GPT."
+  LLM_KEY:
+    description: "API key for the LLM."
     required: true
-  OPENAI_API_MODEL:
-    description: "OpenAI API model."
-    required: false
-    default: "gpt-4"
+  LLM_MODEL:
+    description: "API model name."
+    required: true
+  LLM_BASE_URL:
+    description: "LLM model base url."
+    required: true
   exclude:
     description: "Glob patterns to exclude files from the diff analysis"
     required: false
     default: ""
+outputs:
+  REVIEW_OUTPUT:
+    description: "The final review message"
 runs:
   using: "node16"
   main: "dist/index.js"

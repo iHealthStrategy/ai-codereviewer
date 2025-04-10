@@ -49,11 +49,13 @@ const rest_1 = __nccwpck_require__(5375);
 const parse_diff_1 = __importDefault(__nccwpck_require__(4833));
 const minimatch_1 = __importDefault(__nccwpck_require__(2002));
 const GITHUB_TOKEN = core.getInput("GITHUB_TOKEN");
-const OPENAI_API_KEY = core.getInput("OPENAI_API_KEY");
-const OPENAI_API_MODEL = core.getInput("OPENAI_API_MODEL");
+const LLM_KEY = core.getInput("LLM_KEY");
+const LLM_MODEL = core.getInput("LLM_MODEL");
+const LLM_URL = core.getInput("LLM_BASE_URL");
 const octokit = new rest_1.Octokit({ auth: GITHUB_TOKEN });
 const openai = new openai_1.default({
-    apiKey: OPENAI_API_KEY,
+    apiKey: LLM_KEY,
+    baseURL: LLM_URL
 });
 function getPRDetails() {
     var _a, _b;
@@ -138,7 +140,7 @@ function getAIResponse(prompt) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
         const queryConfig = {
-            model: OPENAI_API_MODEL,
+            model: LLM_MODEL,
             temperature: 0.2,
             max_tokens: 700,
             top_p: 1,
@@ -146,7 +148,7 @@ function getAIResponse(prompt) {
             presence_penalty: 0,
         };
         try {
-            const response = yield openai.chat.completions.create(Object.assign(Object.assign(Object.assign({}, queryConfig), (OPENAI_API_MODEL === "gpt-4-1106-preview"
+            const response = yield openai.chat.completions.create(Object.assign(Object.assign(Object.assign({}, queryConfig), (LLM_MODEL === "gpt-4-1106-preview"
                 ? { response_format: { type: "json_object" } }
                 : {})), { messages: [
                     {
@@ -19666,7 +19668,7 @@ class OpenAI extends Core.APIClient {
     /**
      * API Client for interfacing with the OpenAI API.
      *
-     * @param {string} [opts.apiKey==process.env['OPENAI_API_KEY'] ?? undefined]
+     * @param {string} [opts.apiKey==process.env['LLM_KEY'] ?? undefined]
      * @param {string | null} [opts.organization==process.env['OPENAI_ORG_ID'] ?? null]
      * @param {string} [opts.baseURL] - Override the default base URL for the API.
      * @param {number} [opts.timeout=10 minutes] - The maximum amount of time (in milliseconds) the client will wait for a response before timing out.
@@ -19677,9 +19679,9 @@ class OpenAI extends Core.APIClient {
      * @param {Core.DefaultQuery} opts.defaultQuery - Default query parameters to include with every request to the API.
      * @param {boolean} [opts.dangerouslyAllowBrowser=false] - By default, client-side use of this library is not allowed, as it risks exposing your secret API credentials to attackers.
      */
-    constructor({ apiKey = Core.readEnv('OPENAI_API_KEY'), organization = Core.readEnv('OPENAI_ORG_ID') ?? null, ...opts } = {}) {
+    constructor({ apiKey = Core.readEnv('LLM_KEY'), organization = Core.readEnv('OPENAI_ORG_ID') ?? null, ...opts } = {}) {
         if (apiKey === undefined) {
-            throw new Errors.OpenAIError("The OPENAI_API_KEY environment variable is missing or empty; either provide it, or instantiate the OpenAI client with an apiKey option, like new OpenAI({ apiKey: 'My API Key' }).");
+            throw new Errors.OpenAIError("The LLM_KEY environment variable is missing or empty; either provide it, or instantiate the OpenAI client with an apiKey option, like new OpenAI({ apiKey: 'My API Key' }).");
         }
         const options = {
             apiKey,
