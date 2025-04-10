@@ -115,6 +115,7 @@ function createPrompt(file, chunk, prDetails) {
 - Write the comment in GitHub Markdown format.
 - Use the given description only for the overall context and only comment the code.
 - IMPORTANT: NEVER suggest adding comments to the code.
+- All the comments MUST BE WRITEN IN CHINESE.
 
 Review the following code diff in the file "${file.to}" and take the pull request title and description into account when writing the response.
   
@@ -212,7 +213,7 @@ function main() {
             diff = String(response.data);
         }
         else {
-            console.log("Unsupported event:", process.env.GITHUB_EVENT_NAME);
+            console.log(`Unsupported event:${process.env.GITHUB_EVENT_NAME} action:${eventData.action}`);
             return;
         }
         if (!diff) {
@@ -228,6 +229,12 @@ function main() {
             return !excludePatterns.some((pattern) => { var _a; return (0, minimatch_1.default)((_a = file.to) !== null && _a !== void 0 ? _a : "", pattern); });
         });
         const comments = yield analyzeCode(filteredDiff, prDetails);
+        let output = `共有${comments.length}条修改建议.`;
+        console.log("result:", output);
+        const githubOutputPath = process.env['GITHUB_OUTPUT'];
+        if (githubOutputPath) {
+          appendFileSync(githubOutputPath, `REVIEW_OUTPUT=${output}\n`);
+        }
         if (comments.length > 0) {
             yield createReviewComment(prDetails.owner, prDetails.repo, prDetails.pull_number, comments);
         }
