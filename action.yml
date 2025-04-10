@@ -13,6 +13,9 @@ inputs:
   LLM_BASE_URL:
     description: "LLM model base url."
     required: true
+  output_var:
+    description: "Output information to the env"
+    required: true
   exclude:
     description: "Glob patterns to exclude files from the diff analysis"
     required: false
