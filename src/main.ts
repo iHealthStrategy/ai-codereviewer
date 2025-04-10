@@ -234,7 +234,9 @@ async function main() {
   });
 
   const comments = await analyzeCode(filteredDiff, prDetails);
-  core.exportVariable(core.getInput("output_var"), `共有${comments.length}条修改建议.`);
+  let output = `共有${comments.length}条修改建议.`;
+  console.log("result:", output);
+  core.exportVariable(core.getInput("output_var"), output);
   if (comments.length > 0) {
     await createReviewComment(
       prDetails.owner,
