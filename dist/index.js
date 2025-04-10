@@ -137,6 +137,28 @@ ${chunk.changes
 \`\`\`
 `;
 }
+function extractOutermostBraces(input) {
+  let start = -1;
+  let depth = 0;
+  for (let i = 0; i < input.length; i++) {
+    const char = input[i];
+
+    if (char === '{') {
+      if (depth === 0) {
+        start = i;
+      }
+      depth++;
+    }
+    if (char === '}') {
+      depth--;
+      if (depth === 0 && start !== -1) {
+        return input.substring(start, i + 1);
+      }
+    }
+  }
+  return null;
+}
+
 function getAIResponse(prompt) {
     var _a, _b;
     return __awaiter(this, void 0, void 0, function* () {
@@ -157,6 +179,7 @@ function getAIResponse(prompt) {
                 ] }));
             const res = ((_b = (_a = response.choices[0].message) === null || _a === void 0 ? void 0 : _a.content) === null || _b === void 0 ? void 0 : _b.trim()) || "{}";
             console.log(res)
+            res = extractOutermostBraces(res)
             return JSON.parse(res).reviews;
         }
         catch (error) {
